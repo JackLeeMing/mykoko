@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"github.com/jumpserver/koko/pkg/koko"
+	"github.com/jumpserver/koko/pkg/logger"
 )
 
 var (
 	Buildstamp = ""
 	Githash    = ""
 	Goversion  = ""
-	Version    = "unknown"
+	Version    = "0.0.1.1"
 
 	infoFlag = false
 
@@ -33,14 +34,12 @@ func main() {
 		fmt.Printf("Go Version:          %s\n", Goversion)
 		return
 	}
+	logger.Info("----> The KoKo Start <----")
 	fmt.Printf(startWelcomeMsg, time.Now().Format(timeFormat), Version)
 	koko.RunForever(configPath)
 }
 
 const (
 	timeFormat      = "2006-01-02 15:04:05"
-	startWelcomeMsg = `%s
-KoKo Version %s, more see https://www.jumpserver.org
-Quit the server with CONTROL-C.
-`
+	startWelcomeMsg = `%s KoKo Version %s, more see https://www.jumpserver.org Quit the server with CONTROL-C.`
 )
