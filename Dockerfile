@@ -11,38 +11,35 @@ WORKDIR /opt/koko/ui
 RUN yarn build
 
 WORKDIR /opt/koko
-RUN make build -s \
-    && set -x && ls -al . 
+RUN make build -s &&
+    set -x && ls -al . &&
+    mv /opt/koko/build/koko /opt/koko/koko &&
+    mv /opt/koko/build/helm /opt/koko/bin/helm &&
+    mv /opt/koko/build/kubectl /opt/koko/bin/kubectl
 
-RUN ls -a
-
-RUN mv /opt/koko/build/koko /opt/koko/koko \ 
-    && mv /opt/koko/build/helm /opt/koko/bin/helm \
-    && mv /opt/koko/build/kubectl /opt/koko/bin/kubectl
-
-RUN mkdir /opt/koko/release \
-    && mv /opt/koko/locale /opt/koko/release \
-    && mv /opt/koko/config_example.yml /opt/koko/release \
-    && mv /opt/koko/entrypoint.sh /opt/koko/release \
-    && mv /opt/koko/utils/init-kubectl.sh /opt/koko/release \
-    && chmod 755 /opt/koko/release/entrypoint.sh /opt/koko/release/init-kubectl.sh
+RUN mkdir /opt/koko/release &&
+    mv /opt/koko/locale /opt/koko/release &&
+    mv /opt/koko/config_example.yml /opt/koko/release &&
+    mv /opt/koko/entrypoint.sh /opt/koko/release &&
+    mv /opt/koko/utils/init-kubectl.sh /opt/koko/release &&
+    chmod 755 /opt/koko/release/entrypoint.sh /opt/koko/release/init-kubectl.sh
 
 FROM debian:bullseye-slim
 ARG TARGETARCH
 ENV LANG=en_US.UTF-8
 
 ARG DEPENDENCIES="                    \
-    ca-certificates"
+        ca-certificates"
 
 ARG APT_MIRROR=http://deb.debian.org
 
-RUN set -ex \
-    && sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list \
-    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends ${DEPENDENCIES} \
-    && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -ex &&
+    sed -i "s@http://.*.debian.org@${APT_MIRROR}@g" /etc/apt/sources.list &&
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&
+    apt-get update &&
+    apt-get install -y --no-install-recommends ${DEPENDENCIES} &&
+    apt-get clean all &&
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/koko
 

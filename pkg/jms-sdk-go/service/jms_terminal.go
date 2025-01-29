@@ -5,6 +5,7 @@ func (s *JMService) GetEncryptedConfigValue(encryptKey, encryptedValue string) (
 		"secret_encrypt_key": encryptKey,
 		"encrypted_value":    encryptedValue,
 	}
+	// "/api/v1/terminal/encrypted-config/"
 	_, err = s.authClient.Post(TerminalEncryptedConfigURL, data, &resp)
 	return
 }

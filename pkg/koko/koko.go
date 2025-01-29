@@ -49,7 +49,7 @@ func RunForever(confPath string) {
 		sshSrv: sshSrv,
 	}
 	app.Start()
-	runTasks(jmsService)
+	// runTasks(jmsService) 附加任务先去掉
 	<-gracefulStop
 	app.Stop()
 }
@@ -61,6 +61,7 @@ func bootstrap() {
 
 func bootstrapWithJMService(jmsService *service.JMService) {
 	updateEncryptConfigValue(jmsService)
+	// redis
 	exchange.Initial()
 }
 
@@ -91,6 +92,7 @@ func runTasks(jmsService *service.JMService) {
 	if config.GetConf().UploadFailedFTPFile {
 		go uploadRemainFTPFile(jmsService)
 	}
+	// 和主服务的心跳
 	go keepHeartbeat(jmsService)
 
 	go RunConnectTokensCheck(jmsService)
