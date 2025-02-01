@@ -10,8 +10,11 @@ import (
 
 	"github.com/gorilla/websocket"
 
+	"encoding/json"
+
 	"github.com/jumpserver/koko/pkg/jms-sdk-go/httplib"
 	"github.com/jumpserver/koko/pkg/jms-sdk-go/model"
+	"github.com/jumpserver/koko/pkg/logger"
 )
 
 var AccessKeyUnauthorized = errors.New("access key unauthorized")
@@ -74,6 +77,12 @@ func (s *JMService) GetProfile() (user *model.User, err error) {
 
 func (s *JMService) GetTerminalConfig() (conf model.TerminalConfig, err error) {
 	_, err = s.authClient.Get(TerminalConfigURL, &conf)
+	jsonData, err2 := json.Marshal(conf)
+	if err2 != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	logger.Infof("1. ----> GetTerminalConfig <----: %s", string(jsonData))
 	return
 }
 

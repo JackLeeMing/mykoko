@@ -7,20 +7,13 @@ COPY . .
 ARG VERSION
 ENV VERSION=$VERSION
 
-RUN make build -s
-RUN ls -al ./build
+WORKDIR /opt/koko/ui
+RUN yarn build
 
-RUN set -x && ls -al . \
-    && mv /opt/koko/build/koko /opt/koko/koko \
-    && mv /opt/koko/build/helm /opt/koko/bin/helm \
-    && mv /opt/koko/build/kubectl /opt/koko/bin/kubectl
+WORKDIR /opt/koko
+RUN make build -s && set -x && ls -al . && mv /opt/koko/build/koko /opt/koko/koko && mv /opt/koko/build/helm /opt/koko/bin/helm && mv /opt/koko/build/kubectl /opt/koko/bin/kubectl
 
-RUN mkdir /opt/koko/release \
-    && mv /opt/koko/locale /opt/koko/release \
-    && mv /opt/koko/config_example.yml /opt/koko/release \
-    && mv /opt/koko/entrypoint.sh /opt/koko/release \
-    && mv /opt/koko/utils/init-kubectl.sh /opt/koko/release \
-    && chmod 755 /opt/koko/release/entrypoint.sh /opt/koko/release/init-kubectl.sh
+RUN mkdir /opt/koko/release && mv /opt/koko/locale /opt/koko/release && mv /opt/koko/config_example.yml /opt/koko/release && mv /opt/koko/entrypoint.sh /opt/koko/release && mv /opt/koko/utils/init-kubectl.sh /opt/koko/release && chmod 755 /opt/koko/release/entrypoint.sh /opt/koko/release/init-kubectl.sh
 
 FROM debian:bullseye-slim
 ARG TARGETARCH

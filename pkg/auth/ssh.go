@@ -51,6 +51,11 @@ func SSHPasswordAndPublicKeyAuth(jmsService *service.JMService) SSHAuthFunc {
 		var accessKey model.AccessKey
 		conf := config.GetConf()
 		_ = accessKey.LoadFromFile(conf.AccessKeyFilePath)
+		logger.Infof("1. ----> SSHPasswordAndPublicKeyAuth <----: %s", username)
+		logger.Infof("2. ----> SSHPasswordAndPublicKeyAuth <----: %s", remoteAddr)
+		logger.Infof("1. ----> SSHPasswordAndPublicKeyAuth <----: %s", accessKey)
+		logger.Infof("1. ----> SSHPasswordAndPublicKeyAuth <----: %s", password)
+		logger.Infof("1. ----> SSHPasswordAndPublicKeyAuth <----: %s", publicKey)
 		userClient := service.NewUserClient(
 			service.UserClientUsername(username),
 			service.UserClientRemoteAddr(remoteAddr),

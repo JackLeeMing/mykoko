@@ -27,8 +27,11 @@ const (
 )
 
 var (
-	supportedMACs = []string{"hmac-sha2-256-etm@openssh.com",
-		"hmac-sha2-256", "hmac-sha1"}
+	supportedMACs = []string{
+		"hmac-sha2-256-etm@openssh.com",
+		"hmac-sha2-256",
+		"hmac-sha1",
+	}
 
 	supportedKexAlgos = []string{
 		"curve25519-sha256", "curve25519-sha256@libssh.org",
@@ -42,7 +45,7 @@ type Server struct {
 }
 
 func (s *Server) Start() {
-	logger.Infof("Start SSH server at %s", s.Srv.Addr)
+	logger.Infof(">>>>> Start SSH server at %s", s.Srv.Addr)
 	ln, err := net.Listen("tcp", s.Srv.Addr)
 	if err != nil {
 		logger.Fatal(err)
@@ -65,6 +68,7 @@ func NewSSHServer(jmsService *service.JMService) *Server {
 		logger.Fatal(err)
 	}
 	singer, err := ParsePrivateKeyFromString(termCfg.HostKey)
+	logger.Infof("2. ----> GetTerminalConfig <----: %s", termCfg.HostKey)
 	if err != nil {
 		logger.Fatalf("Parse Terminal private key failed: %s\n", err)
 	}

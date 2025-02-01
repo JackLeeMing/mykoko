@@ -1,8 +1,7 @@
 NAME=koko
 BUILDDIR=build
 
-VERSION = v1.0.1
-
+VERSION = v4.6.0
 BuildTime := $(shell date -u '+%Y-%m-%d %I:%M:%S%p')
 COMMIT := $(shell git rev-parse HEAD)
 GOVERSION := $(shell go version)

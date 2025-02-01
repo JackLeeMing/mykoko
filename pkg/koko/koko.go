@@ -49,7 +49,6 @@ func RunForever(confPath string) {
 		sshSrv: sshSrv,
 	}
 	app.Start()
-	// runTasks(jmsService) 附加任务先去掉
 	<-gracefulStop
 	app.Stop()
 }
@@ -68,6 +67,7 @@ func bootstrapWithJMService(jmsService *service.JMService) {
 func updateEncryptConfigValue(jmsService *service.JMService) {
 	cfg := config.GlobalConfig
 	encryptKey := cfg.SecretEncryptKey
+	logger.Info("1. ----> encryptKey <----: " + encryptKey)
 	if encryptKey != "" {
 		redisPassword := cfg.RedisPassword
 		ret, err := jmsService.GetEncryptedConfigValue(encryptKey, redisPassword)
@@ -82,20 +82,6 @@ func updateEncryptConfigValue(jmsService *service.JMService) {
 			logger.Error("Get encrypted config value failed: empty value")
 		}
 	}
-}
-
-func runTasks(jmsService *service.JMService) {
-	logger.Info(">>> runTasks")
-	if config.GetConf().UploadFailedReplay {
-		go uploadRemainReplay(jmsService)
-	}
-	if config.GetConf().UploadFailedFTPFile {
-		go uploadRemainFTPFile(jmsService)
-	}
-	// 和主服务的心跳
-	go keepHeartbeat(jmsService)
-
-	go RunConnectTokensCheck(jmsService)
 }
 
 func MustJMService() *service.JMService {

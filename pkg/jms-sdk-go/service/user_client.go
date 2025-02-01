@@ -62,6 +62,8 @@ func (u *UserClient) GetAPIToken() (resp AuthResponse, err error) {
 	}
 	signKey := fmt.Sprintf("%s:%s", ak.ID, encryptKey)
 	u.client.SetHeader(svcHeader, fmt.Sprintf("Sign %s", signKey))
+	fmt.Printf("GetAPIToken: %+v\n", data)
+	fmt.Printf("GetAPIToken: %+v\n", resp)
 	_, err = u.client.Post(UserTokenAuthURL, data, &resp)
 	return
 }
